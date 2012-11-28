@@ -8,12 +8,12 @@ import acciones.EliminarAction;
 import acciones.GuardarAction;
 import acciones.NuevoAction;
 import acciones.RefrescarAction;
-import codigos.eCity;
 import comun.componentes.Tabla;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.beans.Beans;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.persistence.RollbackException;
 import javax.swing.JFrame;
@@ -26,13 +26,16 @@ public class CatcAuthors extends JPanel {
     private EliminarAuthor eliminarAction = new EliminarAuthor();
     private GuardarAuthor guardarAction = new GuardarAuthor();
     private RefreshAuthors refreshAction = new RefreshAuthors();
-    private List<eCity> lstCiudad;
+  
+    private List<String> ciudades;
 
     public CatcAuthors() {
+        ciudades = new codigos.Codigos().getCiudades();
         initComponents();
         if (!Beans.isDesignTime()) {
             entityManager.getTransaction().begin();
         }
+        
         
     }
 
@@ -49,30 +52,34 @@ public class CatcAuthors extends JPanel {
         entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("PubsPU").createEntityManager();
         query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT a FROM Authors a");
         list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
+        jPanel1 = new javax.swing.JPanel();
         masterScrollPane = new javax.swing.JScrollPane();
         masterTable = new Tabla();
+        panelRedondo1 = new codigos.desing.PanelRedondo();
         auLabel = new javax.swing.JLabel();
-        auLnameLabel = new javax.swing.JLabel();
-        auFnameLabel = new javax.swing.JLabel();
-        phoneLabel = new javax.swing.JLabel();
-        addressLabel = new javax.swing.JLabel();
-        cityLabel = new javax.swing.JLabel();
-        stateLabel = new javax.swing.JLabel();
-        zipLabel = new javax.swing.JLabel();
-        contractLabel = new javax.swing.JLabel();
         auField = new javax.swing.JTextField();
-        auLnameField = new javax.swing.JTextField();
+        auFnameLabel = new javax.swing.JLabel();
         auFnameField = new javax.swing.JTextField();
+        auLnameLabel = new javax.swing.JLabel();
+        auLnameField = new javax.swing.JTextField();
+        phoneLabel = new javax.swing.JLabel();
         phoneField = new javax.swing.JTextField();
+        addressLabel = new javax.swing.JLabel();
         addressField = new javax.swing.JTextField();
-        cityField = new javax.swing.JTextField();
+        cityLabel = new javax.swing.JLabel();
+        comboBox1 = new comun.componentes.ComboBox();
+        stateLabel = new javax.swing.JLabel();
         stateField = new javax.swing.JTextField();
+        zipLabel = new javax.swing.JLabel();
         zipField = new javax.swing.JTextField();
+        contractLabel = new javax.swing.JLabel();
         contractField = new javax.swing.JTextField();
         saveButton = new javax.swing.JButton();
         refreshButton = new javax.swing.JButton();
-        newButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        newButton = new javax.swing.JButton();
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${au}"));
@@ -105,33 +112,13 @@ public class CatcAuthors extends JPanel {
 
         auLabel.setText("Clave");
 
-        auLnameLabel.setText("Apellidos");
-
-        auFnameLabel.setText("Nombre");
-
-        phoneLabel.setText("Teléfono");
-
-        addressLabel.setText("Dirección");
-
-        cityLabel.setText("Ciudad");
-
-        stateLabel.setText("Estado");
-
-        zipLabel.setText("Código Postal");
-
-        contractLabel.setText("Contacto");
-
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.au}"), auField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), auField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.auLname}"), auLnameField, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceUnreadableValue(null);
-        bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), auLnameField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
+        auFnameLabel.setText("Nombre");
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.auFname}"), auFnameField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
@@ -139,11 +126,23 @@ public class CatcAuthors extends JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), auFnameField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
+        auLnameLabel.setText("Apellidos");
+
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.auLname}"), auLnameField, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding.setSourceUnreadableValue(null);
+        bindingGroup.addBinding(binding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), auLnameField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
+
+        phoneLabel.setText("Teléfono");
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.phone}"), phoneField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), phoneField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
+
+        addressLabel.setText("Dirección");
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.address}"), addressField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
@@ -151,11 +150,15 @@ public class CatcAuthors extends JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), addressField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.city}"), cityField, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        binding.setSourceUnreadableValue(null);
+        cityLabel.setText("Ciudad");
+
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${ciudades}");
+        org.jdesktop.swingbinding.JComboBoxBinding jComboBoxBinding = org.jdesktop.swingbinding.SwingBindings.createJComboBoxBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, comboBox1);
+        bindingGroup.addBinding(jComboBoxBinding);
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.city}"), comboBox1, org.jdesktop.beansbinding.BeanProperty.create("selectedItem"));
         bindingGroup.addBinding(binding);
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), cityField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
+
+        stateLabel.setText("Estado");
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.state}"), stateField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
@@ -163,11 +166,15 @@ public class CatcAuthors extends JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), stateField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
+        zipLabel.setText("Código Postal");
+
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.zip}"), zipField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), zipField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
+
+        contractLabel.setText("Contacto");
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.contract}"), contractField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
@@ -179,123 +186,164 @@ public class CatcAuthors extends JPanel {
 
         refreshButton.setAction(refreshAction);
 
-        newButton.setAction(nuevoAction);
-
         deleteButton.setAction(eliminarAction);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), deleteButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(contractField)
-                    .add(layout.createSequentialGroup()
+        newButton.setAction(nuevoAction);
+
+        org.jdesktop.layout.GroupLayout panelRedondo1Layout = new org.jdesktop.layout.GroupLayout(panelRedondo1);
+        panelRedondo1.setLayout(panelRedondo1Layout);
+        panelRedondo1Layout.setHorizontalGroup(
+            panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(panelRedondo1Layout.createSequentialGroup()
+                .add(8, 8, 8)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(auField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(auLabel))
+                        .add(8, 8, 8)
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(auFnameField)
+                            .add(panelRedondo1Layout.createSequentialGroup()
+                                .add(auFnameLabel)
+                                .add(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(auLnameLabel)
+                            .add(auLnameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 330, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(phoneLabel)
+                            .add(phoneField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 154, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(panelRedondo1Layout.createSequentialGroup()
+                                .add(addressLabel)
+                                .add(0, 0, Short.MAX_VALUE))
+                            .add(addressField)))
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(comboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 216, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(panelRedondo1Layout.createSequentialGroup()
+                                .add(6, 6, 6)
+                                .add(cityLabel)))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(stateField)
+                            .add(stateLabel))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(zipLabel)
+                            .add(zipField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 138, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                    .add(panelRedondo1Layout.createSequentialGroup()
                         .add(6, 6, 6)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(org.jdesktop.layout.GroupLayout.TRAILING, auFnameField)
-                                    .add(layout.createSequentialGroup()
-                                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                            .add(auField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 100, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                            .add(auFnameLabel)
-                                            .add(auLabel))
-                                        .add(0, 292, Short.MAX_VALUE)))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(auLnameLabel)
-                                    .add(auLnameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 407, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                            .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(stateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 220, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(stateLabel)
-                                    .add(contractLabel))
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(contractLabel)
+                            .add(contractField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 484, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                            .add(panelRedondo1Layout.createSequentialGroup()
+                                .add(newButton)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(cityField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 228, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(cityLabel))
+                                .add(deleteButton)
                                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(zipLabel)
-                                    .add(zipField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 138, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
-                            .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(phoneLabel)
-                                    .add(phoneField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 167, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                                .add(27, 27, 27)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(addressField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 544, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                    .add(addressLabel))))))
+                                .add(refreshButton)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(saveButton)))
+                        .add(170, 170, 170)))
                 .addContainerGap())
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createSequentialGroup()
-                        .add(masterScrollPane)
-                        .addContainerGap())
-                    .add(layout.createSequentialGroup()
-                        .add(newButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(deleteButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(refreshButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(saveButton)
-                        .add(0, 0, Short.MAX_VALUE))))
         );
 
-        layout.linkSize(new java.awt.Component[] {deleteButton, newButton, refreshButton, saveButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+        panelRedondo1Layout.linkSize(new java.awt.Component[] {deleteButton, newButton, refreshButton, saveButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
 
-        layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 157, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(auLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(auField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(auLnameLabel)
-                    .add(auFnameLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(auFnameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(auLnameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(phoneLabel)
-                    .add(addressLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(addressField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(phoneField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(cityLabel)
-                    .add(stateLabel)
-                    .add(zipLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(stateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(cityField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(zipField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+        panelRedondo1Layout.setVerticalGroup(
+            panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(panelRedondo1Layout.createSequentialGroup()
+                .add(3, 3, 3)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(auLabel)
+                        .add(3, 3, 3)
+                        .add(auField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(auLnameLabel)
+                            .add(auFnameLabel))
+                        .add(3, 3, 3)
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(panelRedondo1Layout.createSequentialGroup()
+                                .add(3, 3, 3)
+                                .add(auLnameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo1Layout.createSequentialGroup()
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(auFnameField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))))
+                .add(3, 3, 3)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(phoneLabel)
+                        .add(3, 3, 3)
+                        .add(phoneField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(addressLabel)
+                        .add(3, 3, 3)
+                        .add(addressField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(3, 3, 3)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(comboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(stateLabel)
+                            .add(cityLabel))
+                        .add(3, 3, 3)
+                        .add(stateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(zipLabel)
+                        .add(3, 3, 3)
+                        .add(zipField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(3, 3, 3)
                 .add(contractLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(3, 3, 3)
                 .add(contractField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                     .add(saveButton)
                     .add(refreshButton)
                     .add(deleteButton)
                     .add(newButton))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                .add(5, 5, 5)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(masterScrollPane)
+                    .add(panelRedondo1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(5, 5, 5))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(5, 5, 5)
+                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                .add(5, 5, 5)
+                .add(panelRedondo1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(5, 5, 5))
+        );
+
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         bindingGroup.bind();
@@ -310,16 +358,18 @@ public class CatcAuthors extends JPanel {
     private javax.swing.JLabel auLabel;
     private javax.swing.JTextField auLnameField;
     private javax.swing.JLabel auLnameLabel;
-    private javax.swing.JTextField cityField;
     private javax.swing.JLabel cityLabel;
+    private comun.componentes.ComboBox comboBox1;
     private javax.swing.JTextField contractField;
     private javax.swing.JLabel contractLabel;
     private javax.swing.JButton deleteButton;
     private javax.persistence.EntityManager entityManager;
+    private javax.swing.JPanel jPanel1;
     private java.util.List<modelos.Authors> list;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JButton newButton;
+    private codigos.desing.PanelRedondo panelRedondo1;
     private javax.swing.JTextField phoneField;
     private javax.swing.JLabel phoneLabel;
     private javax.persistence.Query query;
@@ -347,18 +397,20 @@ public class CatcAuthors extends JPanel {
     }
 
     /**
-     * @return the lstCiudad
+     * @return the ciudades
      */
-    public List<eCity> getLstCiudad() {
-        return lstCiudad;
+    public List<String> getCiudades() {
+        return ciudades;
     }
 
     /**
-     * @param lstCiudad the lstCiudad to set
+     * @param ciudades the ciudades to set
      */
-    public void setLstCiudad(List<eCity> lstCiudad) {
-        this.lstCiudad = lstCiudad;
+    public void setCiudades(List<String> ciudades) {
+        this.ciudades = ciudades;
     }
+
+ 
 
     public class NuevoAuthor extends NuevoAction {
 
