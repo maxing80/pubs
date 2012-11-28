@@ -4,7 +4,13 @@
  */
 package presentacion.catalogos;
 
+import acciones.EliminarAction;
+import acciones.GuardarAction;
+import acciones.NuevoAction;
+import acciones.RefrescarAction;
+import comun.componentes.Tabla;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.beans.Beans;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +23,12 @@ import javax.swing.JPanel;
  * @author Luis
  */
 public class CatcAuthors extends JPanel {
-    
+
+    private NuevoAuthor nuevoAction = new NuevoAuthor();
+    private EliminarAuthor eliminarAction = new EliminarAuthor();
+    private GuardarAuthor guardarAction = new GuardarAuthor();
+    private RefreshAuthors refreshAction = new RefreshAuthors();
+
     public CatcAuthors() {
         initComponents();
         if (!Beans.isDesignTime()) {
@@ -39,7 +50,7 @@ public class CatcAuthors extends JPanel {
         query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT a FROM Authors a");
         list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
         masterScrollPane = new javax.swing.JScrollPane();
-        masterTable = new javax.swing.JTable();
+        masterTable = new Tabla();
         auLabel = new javax.swing.JLabel();
         auLnameLabel = new javax.swing.JLabel();
         auFnameLabel = new javax.swing.JLabel();
@@ -63,18 +74,13 @@ public class CatcAuthors extends JPanel {
         newButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
 
-        FormListener formListener = new FormListener();
-
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${au}"));
         columnBinding.setColumnName("Au");
         columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${auLname}"));
-        columnBinding.setColumnName("Au Lname");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${auFname}"));
-        columnBinding.setColumnName("Au Fname");
-        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${auFname} ${auLname}"));
+        columnBinding.setColumnName("Nombre");
+        columnBinding.setEditable(false);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${phone}"));
         columnBinding.setColumnName("Phone");
         columnBinding.setColumnClass(String.class);
@@ -94,7 +100,7 @@ public class CatcAuthors extends JPanel {
         columnBinding.setColumnName("Contract");
         columnBinding.setColumnClass(java.math.BigInteger.class);
         bindingGroup.addBinding(jTableBinding);
-
+        jTableBinding.bind();
         masterScrollPane.setViewportView(masterTable);
 
         auLabel.setText("Au:");
@@ -169,62 +175,59 @@ public class CatcAuthors extends JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), contractField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        saveButton.setText("Save");
-        saveButton.addActionListener(formListener);
+        saveButton.setAction(guardarAction);
 
-        refreshButton.setText("Refresh");
-        refreshButton.addActionListener(formListener);
+        refreshButton.setAction(refreshAction);
 
-        newButton.setText("New");
-        newButton.addActionListener(formListener);
+        newButton.setAction(nuevoAction);
 
-        deleteButton.setText("Delete");
+        deleteButton.setAction(eliminarAction);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), deleteButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
-
-        deleteButton.addActionListener(formListener);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(newButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(deleteButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(refreshButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(saveButton)
-                .addContainerGap())
             .add(layout.createSequentialGroup()
-                .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(auLabel)
-                    .add(auLnameLabel)
-                    .add(auFnameLabel)
-                    .add(phoneLabel)
-                    .add(addressLabel)
-                    .add(cityLabel)
-                    .add(stateLabel)
-                    .add(zipLabel)
-                    .add(contractLabel))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(auField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                    .add(auLnameField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                    .add(auFnameField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                    .add(phoneField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                    .add(addressField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                    .add(cityField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                    .add(stateField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                    .add(zipField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                    .add(contractField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE))
-                .addContainerGap())
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                        .add(newButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(deleteButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(refreshButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(saveButton))
+                    .add(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(layout.createSequentialGroup()
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(auLabel)
+                                    .add(auLnameLabel)
+                                    .add(auFnameLabel)
+                                    .add(phoneLabel)
+                                    .add(addressLabel)
+                                    .add(cityLabel)
+                                    .add(stateLabel)
+                                    .add(zipLabel)
+                                    .add(contractLabel))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(auLnameField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                                    .add(auFnameField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                                    .add(phoneField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                                    .add(addressField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                                    .add(cityField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                                    .add(stateField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                                    .add(zipField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                                    .add(contractField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
+                                    .add(layout.createSequentialGroup()
+                                        .add(auField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 106, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                        .add(0, 0, Short.MAX_VALUE))))
+                            .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 764, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -281,77 +284,7 @@ public class CatcAuthors extends JPanel {
         );
 
         bindingGroup.bind();
-    }
-
-    // Code for dispatching events from components to event handlers.
-
-    private class FormListener implements java.awt.event.ActionListener {
-        FormListener() {}
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == saveButton) {
-                CatcAuthors.this.saveButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == refreshButton) {
-                CatcAuthors.this.refreshButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == newButton) {
-                CatcAuthors.this.newButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == deleteButton) {
-                CatcAuthors.this.deleteButtonActionPerformed(evt);
-            }
-        }
     }// </editor-fold>//GEN-END:initComponents
-
-    
-
-    @SuppressWarnings("unchecked")
-    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-        entityManager.getTransaction().rollback();
-        entityManager.getTransaction().begin();
-        java.util.Collection data = query.getResultList();
-        for (Object entity : data) {
-            entityManager.refresh(entity);
-        }
-        list.clear();
-        list.addAll(data);
-    }//GEN-LAST:event_refreshButtonActionPerformed
-    
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int[] selected = masterTable.getSelectedRows();
-        List<modelos.Authors> toRemove = new ArrayList<modelos.Authors>(selected.length);
-        for (int idx = 0; idx < selected.length; idx++) {
-            modelos.Authors a = list.get(masterTable.convertRowIndexToModel(selected[idx]));
-            toRemove.add(a);
-            entityManager.remove(a);
-        }
-        list.removeAll(toRemove);
-    }//GEN-LAST:event_deleteButtonActionPerformed
-    
-    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        modelos.Authors a = new modelos.Authors();
-        entityManager.persist(a);
-        list.add(a);
-        int row = list.size() - 1;
-        masterTable.setRowSelectionInterval(row, row);
-        masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
-    }//GEN-LAST:event_newButtonActionPerformed
-    
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        try {
-            entityManager.getTransaction().commit();
-            entityManager.getTransaction().begin();
-        } catch (RollbackException rex) {
-            rex.printStackTrace();
-            entityManager.getTransaction().begin();
-            List<modelos.Authors> merged = new ArrayList<modelos.Authors>(list.size());
-            for (modelos.Authors a : list) {
-                merged.add(entityManager.merge(a));
-            }
-            list.clear();
-            list.addAll(merged);
-        }
-    }//GEN-LAST:event_saveButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField addressField;
@@ -383,32 +316,11 @@ public class CatcAuthors extends JPanel {
     private javax.swing.JLabel zipLabel;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
-    public static void main(String[] args) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CatcAuthors.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CatcAuthors.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CatcAuthors.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CatcAuthors.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
 
-        /* Create and display the form */
+    public static void main(String[] args) {
+
         EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 JFrame frame = new JFrame();
                 frame.setContentPane(new CatcAuthors());
@@ -417,5 +329,85 @@ public class CatcAuthors extends JPanel {
                 frame.setVisible(true);
             }
         });
+    }
+
+    public class NuevoAuthor extends NuevoAction {
+
+        public NuevoAuthor() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            modelos.Authors a = new modelos.Authors();
+            entityManager.persist(a);
+            list.add(a);
+            int row = list.size() - 1;
+            masterTable.setRowSelectionInterval(row, row);
+            masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
+        }
+    }
+
+    public class EliminarAuthor extends EliminarAction {
+
+        public EliminarAuthor() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int[] selected = masterTable.getSelectedRows();
+            List<modelos.Authors> toRemove = new ArrayList<modelos.Authors>(selected.length);
+            for (int idx = 0; idx < selected.length; idx++) {
+                modelos.Authors a = list.get(masterTable.convertRowIndexToModel(selected[idx]));
+                toRemove.add(a);
+                entityManager.remove(a);
+            }
+            list.removeAll(toRemove);
+        }
+    }
+
+    public class GuardarAuthor extends GuardarAction {
+
+        public GuardarAuthor() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            try {
+                entityManager.getTransaction().commit();
+                entityManager.getTransaction().begin();
+            } catch (RollbackException rex) {
+                rex.printStackTrace();
+                entityManager.getTransaction().begin();
+                List<modelos.Authors> merged = new ArrayList<modelos.Authors>(list.size());
+                for (modelos.Authors a : list) {
+                    merged.add(entityManager.merge(a));
+                }
+                list.clear();
+                list.addAll(merged);
+            }
+
+        }
+    }
+
+    public class RefreshAuthors extends RefrescarAction {
+
+        public RefreshAuthors() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            entityManager.getTransaction().rollback();
+            entityManager.getTransaction().begin();
+            java.util.Collection data = query.getResultList();
+            for (Object entity : data) {
+                entityManager.refresh(entity);
+            }
+            list.clear();
+            list.addAll(data);
+        }
     }
 }
