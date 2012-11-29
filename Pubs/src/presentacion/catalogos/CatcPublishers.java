@@ -4,7 +4,9 @@
  */
 package presentacion.catalogos;
 
+import acciones.*;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.beans.Beans;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,8 +22,17 @@ import javax.swing.JPanel;
  * @author Luis
  */
 public class CatcPublishers extends JPanel {
-    
+
+    private NuevoEditor nuevoAction = new NuevoEditor();
+    private EliminarEditor eliminarAction = new EliminarEditor();
+    private NuevoPubInfo nuevoDetailAction = new NuevoPubInfo();
+    private EliminarPubInfo eliminarDetailAction = new EliminarPubInfo();
+    private RefrescarPubInfo refrescarDetailAction = new RefrescarPubInfo();
+    private GuardarPubInfo guardarDetailAction = new GuardarPubInfo();
+    private List<String> ciudades;
+
     public CatcPublishers() {
+        this.ciudades = new codigos.Codigos().getCiudades();
         initComponents();
         if (!Beans.isDesignTime()) {
             entityManager.getTransaction().begin();
@@ -41,18 +52,20 @@ public class CatcPublishers extends JPanel {
         entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("PubsPU").createEntityManager();
         query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT P FROM Publishers P");
         list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
+        panelRedondo1 = new codigos.desing.PanelRedondo();
         masterScrollPane = new javax.swing.JScrollPane();
         masterTable = new javax.swing.JTable();
         newButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        panelRedondo2 = new codigos.desing.PanelRedondo();
         detailScrollPane = new javax.swing.JScrollPane();
         detailTable = new javax.swing.JTable();
-        saveButton = new javax.swing.JButton();
         refreshButton = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
         deleteDetailButton = new javax.swing.JButton();
         newDetailButton = new javax.swing.JButton();
 
-        FormListener formListener = new FormListener();
+        setBackground(new java.awt.Color(255, 255, 255));
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${pub}"));
@@ -74,15 +87,42 @@ public class CatcPublishers extends JPanel {
 
         masterScrollPane.setViewportView(masterTable);
 
-        newButton.setText("New");
-        newButton.addActionListener(formListener);
+        newButton.setAction(nuevoAction);
 
-        deleteButton.setText("Delete");
+        deleteButton.setAction(eliminarAction);
 
         org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), deleteButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        deleteButton.addActionListener(formListener);
+        org.jdesktop.layout.GroupLayout panelRedondo1Layout = new org.jdesktop.layout.GroupLayout(panelRedondo1);
+        panelRedondo1.setLayout(panelRedondo1Layout);
+        panelRedondo1Layout.setHorizontalGroup(
+            panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(panelRedondo1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, masterScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo1Layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(newButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(deleteButton)))
+                .addContainerGap())
+        );
+
+        panelRedondo1Layout.linkSize(new java.awt.Component[] {deleteButton, newButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
+        panelRedondo1Layout.setVerticalGroup(
+            panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(panelRedondo1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(newButton)
+                    .add(deleteButton))
+                .addContainerGap())
+        );
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${selectedElement.pubInfoCollection}");
         jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, eLProperty, detailTable);
@@ -97,198 +137,80 @@ public class CatcPublishers extends JPanel {
 
         detailScrollPane.setViewportView(detailTable);
 
-        saveButton.setText("Save");
-        saveButton.addActionListener(formListener);
+        refreshButton.setAction(refrescarDetailAction);
 
-        refreshButton.setText("Refresh");
-        refreshButton.addActionListener(formListener);
+        saveButton.setAction(guardarDetailAction);
 
-        deleteDetailButton.setText("Delete");
+        deleteDetailButton.setAction(eliminarDetailAction);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, detailTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), deleteDetailButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        deleteDetailButton.addActionListener(formListener);
-
-        newDetailButton.setText("New");
+        newDetailButton.setAction(nuevoDetailAction);
 
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), newDetailButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        newDetailButton.addActionListener(formListener);
+        org.jdesktop.layout.GroupLayout panelRedondo2Layout = new org.jdesktop.layout.GroupLayout(panelRedondo2);
+        panelRedondo2.setLayout(panelRedondo2Layout);
+        panelRedondo2Layout.setHorizontalGroup(
+            panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(panelRedondo2Layout.createSequentialGroup()
+                .add(panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo2Layout.createSequentialGroup()
+                        .add(8, 8, 8)
+                        .add(detailScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo2Layout.createSequentialGroup()
+                        .addContainerGap(245, Short.MAX_VALUE)
+                        .add(newDetailButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(deleteDetailButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(refreshButton)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(saveButton)))
+                .addContainerGap())
+        );
+
+        panelRedondo2Layout.linkSize(new java.awt.Component[] {deleteDetailButton, newDetailButton, refreshButton, saveButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
+
+        panelRedondo2Layout.setVerticalGroup(
+            panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(panelRedondo2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(detailScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(refreshButton)
+                    .add(saveButton)
+                    .add(deleteDetailButton)
+                    .add(newDetailButton))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .add(newButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(deleteButton)
-                .addContainerGap())
-            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(80, Short.MAX_VALUE)
-                .add(newDetailButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(deleteDetailButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(refreshButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(saveButton)
-                .addContainerGap())
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
-                .addContainerGap())
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(detailScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(panelRedondo1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(panelRedondo2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        layout.linkSize(new java.awt.Component[] {deleteButton, newButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
-        layout.linkSize(new java.awt.Component[] {deleteDetailButton, newDetailButton, refreshButton, saveButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                .add(panelRedondo1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(deleteButton)
-                    .add(newButton))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(detailScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(saveButton)
-                    .add(refreshButton)
-                    .add(deleteDetailButton)
-                    .add(newDetailButton))
-                .addContainerGap())
+                .add(panelRedondo2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         bindingGroup.bind();
-    }
-
-    // Code for dispatching events from components to event handlers.
-
-    private class FormListener implements java.awt.event.ActionListener {
-        FormListener() {}
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == newButton) {
-                CatcPublishers.this.newButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == deleteButton) {
-                CatcPublishers.this.deleteButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == saveButton) {
-                CatcPublishers.this.saveButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == refreshButton) {
-                CatcPublishers.this.refreshButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == deleteDetailButton) {
-                CatcPublishers.this.deleteDetailButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == newDetailButton) {
-                CatcPublishers.this.newDetailButtonActionPerformed(evt);
-            }
-        }
     }// </editor-fold>//GEN-END:initComponents
-
-    
-    private void deleteDetailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteDetailButtonActionPerformed
-        int index = masterTable.getSelectedRow();
-        modelos.Publishers P = list.get(masterTable.convertRowIndexToModel(index));
-        Collection<modelos.PubInfo> ps = P.getPubInfoCollection();
-        int[] selected = detailTable.getSelectedRows();
-        List<modelos.PubInfo> toRemove = new ArrayList<modelos.PubInfo>(selected.length);
-        for (int idx = 0; idx < selected.length; idx++) {
-            selected[idx] = detailTable.convertRowIndexToModel(selected[idx]);
-            int count = 0;
-            Iterator<modelos.PubInfo> iter = ps.iterator();
-            while (count++ < selected[idx]) {
-                iter.next();
-            }
-            modelos.PubInfo p = iter.next();
-            toRemove.add(p);
-            entityManager.remove(p);
-        }
-        ps.removeAll(toRemove);
-        masterTable.clearSelection();
-        masterTable.setRowSelectionInterval(index, index);
-    }//GEN-LAST:event_deleteDetailButtonActionPerformed
-    
-    private void newDetailButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newDetailButtonActionPerformed
-        int index = masterTable.getSelectedRow();
-        modelos.Publishers P = list.get(masterTable.convertRowIndexToModel(index));
-        Collection<modelos.PubInfo> ps = P.getPubInfoCollection();
-        if (ps == null) {
-            ps = new LinkedList<modelos.PubInfo>();
-            P.setPubInfoCollection((List) ps);
-        }
-        modelos.PubInfo p = new modelos.PubInfo();
-        entityManager.persist(p);
-        p.setPubId2(P);
-        ps.add(p);
-        masterTable.clearSelection();
-        masterTable.setRowSelectionInterval(index, index);
-        int row = ps.size() - 1;
-        detailTable.setRowSelectionInterval(row, row);
-        detailTable.scrollRectToVisible(detailTable.getCellRect(row, 0, true));
-    }//GEN-LAST:event_newDetailButtonActionPerformed
-    
-
-    @SuppressWarnings("unchecked")
-    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-        entityManager.getTransaction().rollback();
-        entityManager.getTransaction().begin();
-        java.util.Collection data = query.getResultList();
-        for (Object entity : data) {
-            entityManager.refresh(entity);
-        }
-        list.clear();
-        list.addAll(data);
-    }//GEN-LAST:event_refreshButtonActionPerformed
-    
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int[] selected = masterTable.getSelectedRows();
-        List<modelos.Publishers> toRemove = new ArrayList<modelos.Publishers>(selected.length);
-        for (int idx = 0; idx < selected.length; idx++) {
-            modelos.Publishers P = list.get(masterTable.convertRowIndexToModel(selected[idx]));
-            toRemove.add(P);
-            entityManager.remove(P);
-        }
-        list.removeAll(toRemove);
-    }//GEN-LAST:event_deleteButtonActionPerformed
-    
-    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        modelos.Publishers P = new modelos.Publishers();
-        entityManager.persist(P);
-        list.add(P);
-        int row = list.size() - 1;
-        masterTable.setRowSelectionInterval(row, row);
-        masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
-    }//GEN-LAST:event_newButtonActionPerformed
-    
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        try {
-            entityManager.getTransaction().commit();
-            entityManager.getTransaction().begin();
-        } catch (RollbackException rex) {
-            rex.printStackTrace();
-            entityManager.getTransaction().begin();
-            List<modelos.Publishers> merged = new ArrayList<modelos.Publishers>(list.size());
-            for (modelos.Publishers P : list) {
-                merged.add(entityManager.merge(P));
-            }
-            list.clear();
-            list.addAll(merged);
-        }
-    }//GEN-LAST:event_saveButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
@@ -301,11 +223,14 @@ public class CatcPublishers extends JPanel {
     private javax.swing.JTable masterTable;
     private javax.swing.JButton newButton;
     private javax.swing.JButton newDetailButton;
+    private codigos.desing.PanelRedondo panelRedondo1;
+    private codigos.desing.PanelRedondo panelRedondo2;
     private javax.persistence.Query query;
     private javax.swing.JButton refreshButton;
     private javax.swing.JButton saveButton;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
     public static void main(String[] args) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -340,5 +265,155 @@ public class CatcPublishers extends JPanel {
                 frame.setVisible(true);
             }
         });
+    }
+
+    /**
+     * @return the ciudades
+     */
+    public List<String> getCiudades() {
+        return ciudades;
+    }
+
+    /**
+     * @param ciudades the ciudades to set
+     */
+    public void setCiudades(List<String> ciudades) {
+        this.ciudades = ciudades;
+    }
+
+    public class NuevoEditor extends NuevoAction {
+
+        public NuevoEditor() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            modelos.Publishers a = new modelos.Publishers();
+            entityManager.persist(a);
+            list.add(a);
+            int row = list.size() - 1;
+            masterTable.setRowSelectionInterval(row, row);
+            masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
+        }
+    }
+
+    public class EliminarEditor extends EliminarAction {
+
+        public EliminarEditor() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int[] selected = masterTable.getSelectedRows();
+            List<modelos.Publishers> toRemove = new ArrayList<modelos.Publishers>(selected.length);
+            for (int idx = 0; idx < selected.length; idx++) {
+                modelos.Publishers a = list.get(masterTable.convertRowIndexToModel(selected[idx]));
+                toRemove.add(a);
+                entityManager.remove(a);
+            }
+            list.removeAll(toRemove);
+        }
+    }
+
+    public class NuevoPubInfo extends NuevoAction {
+
+        public NuevoPubInfo() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int index = masterTable.getSelectedRow();
+            modelos.Publishers P = list.get(masterTable.convertRowIndexToModel(index));
+            Collection<modelos.PubInfo> ps = P.getPubInfoCollection();
+            if (ps == null) {
+                ps = new LinkedList<modelos.PubInfo>();
+                P.setPubInfoCollection((List) ps);
+            }
+            modelos.PubInfo p = new modelos.PubInfo();
+            entityManager.persist(p);
+            p.setPubId2(P);
+            ps.add(p);
+            masterTable.clearSelection();
+            masterTable.setRowSelectionInterval(index, index);
+            int row = ps.size() - 1;
+            detailTable.setRowSelectionInterval(row, row);
+            detailTable.scrollRectToVisible(detailTable.getCellRect(row, 0, true));
+        }
+    }
+
+    public class EliminarPubInfo extends EliminarAction {
+
+        public EliminarPubInfo() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int index = masterTable.getSelectedRow();
+            modelos.Publishers P = list.get(masterTable.convertRowIndexToModel(index));
+            Collection<modelos.PubInfo> ps = P.getPubInfoCollection();
+            int[] selected = detailTable.getSelectedRows();
+            List<modelos.PubInfo> toRemove = new ArrayList<modelos.PubInfo>(selected.length);
+            for (int idx = 0; idx < selected.length; idx++) {
+                selected[idx] = detailTable.convertRowIndexToModel(selected[idx]);
+                int count = 0;
+                Iterator<modelos.PubInfo> iter = ps.iterator();
+                while (count++ < selected[idx]) {
+                    iter.next();
+                }
+                modelos.PubInfo p = iter.next();
+                toRemove.add(p);
+                entityManager.remove(p);
+            }
+            ps.removeAll(toRemove);
+            masterTable.clearSelection();
+            masterTable.setRowSelectionInterval(index, index);
+        }
+    }
+
+    public class RefrescarPubInfo extends RefrescarAction {
+
+        public RefrescarPubInfo() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            entityManager.getTransaction().rollback();
+            entityManager.getTransaction().begin();
+            java.util.Collection data = query.getResultList();
+            for (Object entity : data) {
+                entityManager.refresh(entity);
+            }
+            list.clear();
+            list.addAll(data);
+        }
+    }
+
+    public class GuardarPubInfo extends GuardarAction {
+
+        public GuardarPubInfo() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            try {
+                entityManager.getTransaction().commit();
+                entityManager.getTransaction().begin();
+            } catch (RollbackException rex) {
+                rex.printStackTrace();
+                entityManager.getTransaction().begin();
+                List<modelos.Publishers> merged = new ArrayList<modelos.Publishers>(list.size());
+                for (modelos.Publishers P : list) {
+                    merged.add(entityManager.merge(P));
+                }
+                list.clear();
+                list.addAll(merged);
+            }
+        }
     }
 }
