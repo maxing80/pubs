@@ -6,10 +6,17 @@ package comun;
 
 import javax.swing.JInternalFrame;
 
-/**
- *
- * @author Luis
- */
+
 public class Dialog extends JInternalFrame{
+
+    public Dialog() {
+        super();
+        this.setClosable(true);
+        this.setIconifiable(true);
+        this.setResizable(true);
+        this.setMaximizable(true);
+    }
+    
+    
     
 }
