@@ -11,5 +11,11 @@ import javax.swing.JComboBox;
  * @author Luis
  */
 public class ComboBox extends JComboBox {
+
+    public ComboBox() {
+        this.setEditable(true);
+        AutoCompletion autoCompletion = new AutoCompletion(this);
+    }
+    
     
 }
