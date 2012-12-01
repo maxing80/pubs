@@ -4,12 +4,14 @@ import comun.Dialog;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
+import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import presentacion.catalogos.CatcAuthors;
 import presentacion.catalogos.CatcPublishers;
 import presentacion.catalogos.CatcStores;
 import presentacion.catalogos.CatcTitles;
+import presentacion.procesos.ProSales;
 
 /**
  *
@@ -28,10 +30,11 @@ public class Pubs extends javax.swing.JFrame {
     }
     
     private void generarMenu(){
-        makeElementoItem(new CatcAuthors(), "Autores");
-        makeElementoItem(new CatcPublishers(), "Editores");
-        makeElementoItem(new CatcStores(), "Tiendas");
-        makeElementoItem(new CatcTitles(), "Titulos");
+        makeElementoItem(new CatcAuthors(), "Autores",fileMenu);
+        makeElementoItem(new CatcPublishers(), "Editores",fileMenu);
+        makeElementoItem(new CatcStores(), "Tiendas",fileMenu);
+        makeElementoItem(new CatcTitles(), "Titulos",fileMenu);
+        makeElementoItem(new ProSales(), "Ventas",jMenu1);
     }
 
 
@@ -42,6 +45,7 @@ public class Pubs extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
         helpMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -53,6 +57,9 @@ public class Pubs extends javax.swing.JFrame {
         fileMenu.setMnemonic('f');
         fileMenu.setText("Catálogos");
         menuBar.add(fileMenu);
+
+        jMenu1.setText("Procesos");
+        menuBar.add(jMenu1);
 
         helpMenu.setMnemonic('h');
         helpMenu.setText("Ayuda");
@@ -90,14 +97,15 @@ public class Pubs extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JDesktopPane jDesktopPane1;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 
 
-private void makeElementoItem(JPanel pnl, String nombre){
+private void makeElementoItem(JPanel pnl, String nombre, JMenu menu){
       
         JMenuItem item = new JMenuItem(new ejecutarDialogo(nombre, pnl));
-        fileMenu.add(item);
+        menu.add(item);
 }
 
 private class ejecutarDialogo extends AbstractAction{
