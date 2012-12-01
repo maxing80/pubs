@@ -23,12 +23,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.envers.Audited;
 
 /**
  *
  * @author Luis
  */
 @Entity
+@Audited
 @Table(name = "PUBLISHERS", catalog = "", schema = "PUBS")
 @NamedQueries({
     @NamedQuery(name = "Publishers.findAll", query = "SELECT p FROM Publishers p"),
