@@ -30,9 +30,29 @@ public class CatcPublishers extends JPanel {
     private RefrescarPubInfo refrescarDetailAction = new RefrescarPubInfo();
     private GuardarPubInfo guardarDetailAction = new GuardarPubInfo();
     private List<String> ciudades;
+    private List<String> estados;
+
+    public List<String> getEstados() {
+        return estados;
+    }
+
+    public void setEstados(List<String> estados) {
+        this.estados = estados;
+    }
+
+    public List<String> getPaises() {
+        return paises;
+    }
+
+    public void setPaises(List<String> paises) {
+        this.paises = paises;
+    }
+    private List<String> paises;
 
     public CatcPublishers() {
         this.ciudades = new codigos.Codigos().getCiudades();
+        this.estados = new codigos.Codigos().getEstados();
+        this.paises = new codigos.Codigos().getPaises();
         initComponents();
         if (!Beans.isDesignTime()) {
             entityManager.getTransaction().begin();
@@ -69,22 +89,22 @@ public class CatcPublishers extends JPanel {
 
         org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
         org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${pub}"));
-        columnBinding.setColumnName("Pub");
+        columnBinding.setColumnName("Publicación");
         columnBinding.setColumnClass(String.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${pubName}"));
-        columnBinding.setColumnName("Pub Name");
+        columnBinding.setColumnName("Nombre");
         columnBinding.setColumnClass(String.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${city}"));
-        columnBinding.setColumnName("City");
+        columnBinding.setColumnName("Ciudad");
         columnBinding.setColumnClass(String.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${state}"));
-        columnBinding.setColumnName("State");
+        columnBinding.setColumnName("Estado");
         columnBinding.setColumnClass(String.class);
         columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${country}"));
-        columnBinding.setColumnName("Country");
+        columnBinding.setColumnName("País");
         columnBinding.setColumnClass(String.class);
         bindingGroup.addBinding(jTableBinding);
-
+        jTableBinding.bind();
         masterScrollPane.setViewportView(masterTable);
 
         newButton.setAction(nuevoAction);
@@ -99,29 +119,26 @@ public class CatcPublishers extends JPanel {
         panelRedondo1Layout.setHorizontalGroup(
             panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelRedondo1Layout.createSequentialGroup()
-                .addContainerGap()
+                .add(10, 10, 10)
                 .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, masterScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo1Layout.createSequentialGroup()
-                        .add(0, 0, Short.MAX_VALUE)
-                        .add(newButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(deleteButton)))
-                .addContainerGap())
+                        .add(397, 397, 397)
+                        .add(newButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(5, 5, 5)
+                        .add(deleteButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .add(5, 5, 5))
         );
-
-        panelRedondo1Layout.linkSize(new java.awt.Component[] {deleteButton, newButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
         panelRedondo1Layout.setVerticalGroup(
             panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelRedondo1Layout.createSequentialGroup()
-                .addContainerGap()
+                .add(10, 10, 10)
                 .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(5, 5, 5)
                 .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(newButton)
-                    .add(deleteButton))
-                .addContainerGap())
+                    .add(newButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(deleteButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(5, 5, 5))
         );
 
         org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${selectedElement.pubInfoCollection}");
@@ -158,34 +175,31 @@ public class CatcPublishers extends JPanel {
             .add(panelRedondo2Layout.createSequentialGroup()
                 .add(panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo2Layout.createSequentialGroup()
-                        .add(8, 8, 8)
+                        .add(10, 10, 10)
                         .add(detailScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo2Layout.createSequentialGroup()
-                        .addContainerGap(245, Short.MAX_VALUE)
-                        .add(newDetailButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(deleteDetailButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(refreshButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(saveButton)))
-                .addContainerGap())
+                        .add(247, 247, 247)
+                        .add(newDetailButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(5, 5, 5)
+                        .add(deleteDetailButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(5, 5, 5)
+                        .add(refreshButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(5, 5, 5)
+                        .add(saveButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .add(5, 5, 5))
         );
-
-        panelRedondo2Layout.linkSize(new java.awt.Component[] {deleteDetailButton, newDetailButton, refreshButton, saveButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
         panelRedondo2Layout.setVerticalGroup(
             panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelRedondo2Layout.createSequentialGroup()
-                .addContainerGap()
+                .add(10, 10, 10)
                 .add(detailScrollPane, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 91, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(5, 5, 5)
                 .add(panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(refreshButton)
-                    .add(saveButton)
-                    .add(deleteDetailButton)
-                    .add(newDetailButton))
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(refreshButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(saveButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(deleteDetailButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(newDetailButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(5, 5, 5))
         );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
@@ -193,20 +207,20 @@ public class CatcPublishers extends JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
+                .add(5, 5, 5)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(panelRedondo1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .add(panelRedondo2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .add(5, 5, 5))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(panelRedondo1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(5, 5, 5)
+                .add(panelRedondo1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(5, 5, 5)
                 .add(panelRedondo2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(5, 5, 5))
         );
 
         bindingGroup.bind();
