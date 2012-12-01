@@ -67,6 +67,8 @@ public class CatcTitles extends JPanel {
         masterScrollPane = new javax.swing.JScrollPane();
         masterTable = new javax.swing.JTable();
 
+        FormListener formListener = new FormListener();
+
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
         newDetailButton.setAction(nuevoDetailTitle);
@@ -107,38 +109,36 @@ public class CatcTitles extends JPanel {
         panelRedondo1Layout.setHorizontalGroup(
             panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelRedondo1Layout.createSequentialGroup()
-                .add(30, 30, 30)
+                .add(5, 5, 5)
                 .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(detailScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 925, Short.MAX_VALUE)
+                    .add(detailScrollPane)
                     .add(panelRedondo1Layout.createSequentialGroup()
-                        .add(newDetailButton)
+                        .add(newDetailButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(5, 5, 5)
-                        .add(deleteDetailButton)
+                        .add(deleteDetailButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(5, 5, 5)
-                        .add(refreshButton)
+                        .add(refreshButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .add(5, 5, 5)
-                        .add(saveButton)
-                        .add(0, 0, Short.MAX_VALUE)))
-                .add(30, 30, 30))
+                        .add(saveButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(659, 659, 659)))
+                .addContainerGap())
         );
-
-        panelRedondo1Layout.linkSize(new java.awt.Component[] {deleteDetailButton, newDetailButton, refreshButton, saveButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
         panelRedondo1Layout.setVerticalGroup(
             panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelRedondo1Layout.createSequentialGroup()
-                .add(30, 30, 30)
-                .add(detailScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                .addContainerGap()
+                .add(detailScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                 .add(5, 5, 5)
                 .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(saveButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                    .add(refreshButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(deleteDetailButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(newDetailButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .add(saveButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(refreshButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(deleteDetailButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(newDetailButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(5, 5, 5))
         );
 
         newButton.setAction(nuevoTitle);
+        newButton.addActionListener(formListener);
 
         deleteButton.setAction(eliminarTitle);
 
@@ -185,29 +185,28 @@ public class CatcTitles extends JPanel {
         panelRedondo2Layout.setHorizontalGroup(
             panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(panelRedondo2Layout.createSequentialGroup()
-                .add(10, 10, 10)
-                .add(newButton)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(deleteButton)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .add(panelRedondo2Layout.createSequentialGroup()
-                .add(30, 30, 30)
-                .add(masterScrollPane)
-                .add(30, 30, 30))
+                .add(panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(panelRedondo2Layout.createSequentialGroup()
+                        .add(10, 10, 10)
+                        .add(masterScrollPane))
+                    .add(panelRedondo2Layout.createSequentialGroup()
+                        .add(5, 5, 5)
+                        .add(newButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(5, 5, 5)
+                        .add(deleteButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(815, 815, 815)))
+                .add(10, 10, 10))
         );
-
-        panelRedondo2Layout.linkSize(new java.awt.Component[] {deleteButton, newButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
         panelRedondo2Layout.setVerticalGroup(
             panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo2Layout.createSequentialGroup()
-                .add(30, 30, 30)
-                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                .add(10, 10, 10)
+                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
                 .add(5, 5, 5)
-                .add(panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(newButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
-                    .add(deleteButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .add(panelRedondo2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(newButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(deleteButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 32, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(5, 5, 5))
         );
 
         org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
@@ -243,7 +242,22 @@ public class CatcTitles extends JPanel {
         );
 
         bindingGroup.bind();
+    }
+
+    // Code for dispatching events from components to event handlers.
+
+    private class FormListener implements java.awt.event.ActionListener {
+        FormListener() {}
+        public void actionPerformed(java.awt.event.ActionEvent evt) {
+            if (evt.getSource() == newButton) {
+                CatcTitles.this.newButtonActionPerformed(evt);
+            }
+        }
     }// </editor-fold>//GEN-END:initComponents
+
+    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_newButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;

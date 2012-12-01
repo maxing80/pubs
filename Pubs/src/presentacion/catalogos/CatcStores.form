@@ -103,58 +103,74 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="newButton" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="deleteButton" pref="76" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="refreshButton" pref="76" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Component id="saveButton" pref="76" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="247" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="storLabel" max="32767" attributes="0"/>
                                   <Component id="storField" max="32767" attributes="0"/>
+                                  <Component id="storLabel" max="32767" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <Component id="storNameLabel" min="-2" pref="62" max="-2" attributes="0"/>
+                                      <Component id="storNameLabel" pref="129" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="352" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <Component id="storNameField" max="32767" attributes="0"/>
                                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   </Group>
-                                  <Component id="storNameField" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                      <Component id="comboBox2" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="cityLabel" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="storAddressLabel" alignment="0" max="32767" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="newButton" pref="79" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                      <Component id="deleteButton" pref="79" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                      <Component id="refreshButton" pref="79" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                      <Component id="saveButton" pref="79" max="32767" attributes="0"/>
+                                  </Group>
                                   <Component id="storAddressField" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="cityField" alignment="0" max="32767" attributes="0"/>
+                              </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="cityLabel" max="32767" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <Group type="103" groupAlignment="0" attributes="0">
+                                                  <Component id="zipField" alignment="0" max="32767" attributes="0"/>
+                                                  <Group type="102" attributes="0">
+                                                      <Component id="zipLabel" pref="131" max="32767" attributes="0"/>
+                                                      <EmptySpace min="-2" pref="61" max="-2" attributes="0"/>
+                                                  </Group>
+                                              </Group>
                                               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                           </Group>
-                                          <Component id="storAddressLabel" max="32767" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
+                                              <Component id="stateLabel" pref="0" max="32767" attributes="0"/>
+                                              <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   </Group>
-                              </Group>
-                              <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="zipLabel" min="-2" max="-2" attributes="0"/>
-                                  <Component id="zipField" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="stateField" alignment="1" max="32767" attributes="0"/>
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
-                                      <Component id="stateLabel" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
+                                      <Component id="comboBox1" max="32767" attributes="0"/>
+                                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -172,9 +188,9 @@
                           <Component id="storField" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="zipLabel" alignment="0" max="32767" attributes="0"/>
-                          <Component id="storAddressLabel" alignment="1" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="storAddressLabel" alignment="3" max="32767" attributes="0"/>
+                          <Component id="zipLabel" alignment="3" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -188,8 +204,8 @@
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="cityField" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="stateField" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="comboBox1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="comboBox2" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -198,20 +214,12 @@
                           <Component id="deleteButton" alignment="3" max="32767" attributes="0"/>
                           <Component id="newButton" alignment="3" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JTextField" name="stateField">
-              <BindingProperties>
-                <BindingProperty name="text" source="masterTable" sourcePath="${selectedElement.state}" target="stateField" targetPath="text" updateStrategy="0" immediately="false">
-                  <Property name="incompletePathValue" type="java.lang.String" value="null"/>
-                </BindingProperty>
-                <BindingProperty name="enabled" source="masterTable" sourcePath="${selectedElement != null}" target="stateField" targetPath="enabled" updateStrategy="1" immediately="false"/>
-              </BindingProperties>
-            </Component>
             <Component class="javax.swing.JTextField" name="zipField">
               <BindingProperties>
                 <BindingProperty name="text" source="masterTable" sourcePath="${selectedElement.zip}" target="zipField" targetPath="text" updateStrategy="0" immediately="false">
@@ -287,14 +295,6 @@
                 <Property name="text" type="java.lang.String" value="Ciudad:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="cityField">
-              <BindingProperties>
-                <BindingProperty name="text" source="masterTable" sourcePath="${selectedElement.city}" target="cityField" targetPath="text" updateStrategy="0" immediately="false">
-                  <Property name="incompletePathValue" type="java.lang.String" value="null"/>
-                </BindingProperty>
-                <BindingProperty name="enabled" source="masterTable" sourcePath="${selectedElement != null}" target="cityField" targetPath="enabled" updateStrategy="1" immediately="false"/>
-              </BindingProperties>
-            </Component>
             <Component class="javax.swing.JTextField" name="storAddressField">
               <BindingProperties>
                 <BindingProperty name="text" source="masterTable" sourcePath="${selectedElement.storAddress}" target="storAddressField" targetPath="text" updateStrategy="0" immediately="false">
@@ -327,6 +327,18 @@
                   <Property name="incompletePathValue" type="java.lang.String" value="null"/>
                 </BindingProperty>
                 <BindingProperty name="enabled" source="masterTable" sourcePath="${selectedElement != null}" target="storField" targetPath="enabled" updateStrategy="1" immediately="false"/>
+              </BindingProperties>
+            </Component>
+            <Component class="comun.componentes.ComboBox" name="comboBox1">
+              <BindingProperties>
+                <BindingProperty name="elements" source="Form" sourcePath="${estados}" target="comboBox1" targetPath="elements" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selectedItem" source="masterTable" sourcePath="${selectedElement.state}" target="comboBox1" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
+              </BindingProperties>
+            </Component>
+            <Component class="comun.componentes.ComboBox" name="comboBox2">
+              <BindingProperties>
+                <BindingProperty name="elements" source="Form" sourcePath="${ciudades}" target="comboBox2" targetPath="elements" updateStrategy="0" immediately="false"/>
+                <BindingProperty name="selectedItem" source="masterTable" sourcePath="${selectedElement.city}" target="comboBox2" targetPath="selectedItem" updateStrategy="0" immediately="false"/>
               </BindingProperties>
             </Component>
           </SubComponents>
