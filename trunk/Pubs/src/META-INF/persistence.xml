@@ -10,13 +10,12 @@
     <class>modelos.Titleauthor</class>
     <class>modelos.Sales</class>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.1.105:1521:XE"/>
-      <property name="javax.persistence.jdbc.password" value="PUBS"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.1.107:1521:xe"/>
+      <property name="javax.persistence.jdbc.password" value="Pubs"/>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-      <property name="javax.persistence.jdbc.user" value="PUBS"/>
+      <property name="javax.persistence.jdbc.user" value="Pubs"/>
       <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
-     
     </properties>
   </persistence-unit>
 </persistence>
