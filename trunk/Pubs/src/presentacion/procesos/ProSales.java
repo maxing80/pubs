@@ -4,7 +4,12 @@
  */
 package presentacion.procesos;
 
+import acciones.EliminarAction;
+import acciones.GuardarAction;
+import acciones.NuevoAction;
+import acciones.RefrescarAction;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.beans.Beans;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +22,11 @@ import javax.swing.JPanel;
  * @author Luis
  */
 public class ProSales extends JPanel {
+
+    private GuardarVenta guardarVentas = new GuardarVenta();
+    private RefreshVenta refreshVentas = new RefreshVenta();
+    private EliminarVenta eliminarVentas = new EliminarVenta();
+    private NuevoVenta nuevoVentas = new NuevoVenta();
     
     public ProSales() {
         initComponents();
@@ -38,63 +48,43 @@ public class ProSales extends JPanel {
         entityManager = java.beans.Beans.isDesignTime() ? null : javax.persistence.Persistence.createEntityManagerFactory("PubsPU").createEntityManager();
         query = java.beans.Beans.isDesignTime() ? null : entityManager.createQuery("SELECT s FROM Sales s");
         list = java.beans.Beans.isDesignTime() ? java.util.Collections.emptyList() : org.jdesktop.observablecollections.ObservableCollections.observableList(query.getResultList());
-        masterScrollPane = new javax.swing.JScrollPane();
-        masterTable = new javax.swing.JTable();
+        jPanel1 = new javax.swing.JPanel();
+        panelRedondo1 = new codigos.desing.PanelRedondo();
+        newButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        refreshButton = new javax.swing.JButton();
+        saveButton = new javax.swing.JButton();
         storIdLabel = new javax.swing.JLabel();
-        storLabel = new javax.swing.JLabel();
-        ordDateLabel = new javax.swing.JLabel();
-        qtyLabel = new javax.swing.JLabel();
-        paytermsLabel = new javax.swing.JLabel();
-        titleIdLabel = new javax.swing.JLabel();
         storIdField = new javax.swing.JTextField();
         storField = new javax.swing.JTextField();
         ordDateField = new javax.swing.JTextField();
         qtyField = new javax.swing.JTextField();
         paytermsField = new javax.swing.JTextField();
         titleIdField = new javax.swing.JTextField();
-        saveButton = new javax.swing.JButton();
-        refreshButton = new javax.swing.JButton();
-        newButton = new javax.swing.JButton();
-        deleteButton = new javax.swing.JButton();
+        titleIdLabel = new javax.swing.JLabel();
+        paytermsLabel = new javax.swing.JLabel();
+        qtyLabel = new javax.swing.JLabel();
+        ordDateLabel = new javax.swing.JLabel();
+        storLabel = new javax.swing.JLabel();
+        masterScrollPane = new javax.swing.JScrollPane();
+        masterTable = new javax.swing.JTable();
 
-        FormListener formListener = new FormListener();
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
-        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${storId}"));
-        columnBinding.setColumnName("Stor Id");
-        columnBinding.setColumnClass(java.math.BigDecimal.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stor}"));
-        columnBinding.setColumnName("Stor");
-        columnBinding.setColumnClass(java.math.BigInteger.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${ordDate}"));
-        columnBinding.setColumnName("Ord Date");
-        columnBinding.setColumnClass(java.util.Date.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${qty}"));
-        columnBinding.setColumnName("Qty");
-        columnBinding.setColumnClass(java.math.BigInteger.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${payterms}"));
-        columnBinding.setColumnName("Payterms");
-        columnBinding.setColumnClass(String.class);
-        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${titleId}"));
-        columnBinding.setColumnName("Title Id");
-        columnBinding.setColumnClass(java.math.BigInteger.class);
-        bindingGroup.addBinding(jTableBinding);
+        newButton.setAction(nuevoVentas);
 
-        masterScrollPane.setViewportView(masterTable);
+        deleteButton.setAction(eliminarVentas);
 
-        storIdLabel.setText("Stor Id:");
+        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), deleteButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
+        bindingGroup.addBinding(binding);
 
-        storLabel.setText("Stor:");
+        refreshButton.setAction(refreshVentas);
 
-        ordDateLabel.setText("Ord Date:");
+        saveButton.setAction(guardarVentas);
 
-        qtyLabel.setText("Qty:");
+        storIdLabel.setText("Id Tienda:");
 
-        paytermsLabel.setText("Payterms:");
-
-        titleIdLabel.setText("Title Id:");
-
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.storId}"), storIdField, org.jdesktop.beansbinding.BeanProperty.create("text"));
+        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement.storId}"), storIdField, org.jdesktop.beansbinding.BeanProperty.create("text"));
         binding.setSourceUnreadableValue(null);
         bindingGroup.addBinding(binding);
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), storIdField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
@@ -130,181 +120,155 @@ public class ProSales extends JPanel {
         binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), titleIdField, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
         bindingGroup.addBinding(binding);
 
-        saveButton.setText("Save");
-        saveButton.addActionListener(formListener);
+        titleIdLabel.setText("Titulo:");
 
-        refreshButton.setText("Refresh");
-        refreshButton.addActionListener(formListener);
+        paytermsLabel.setText("Términos:");
 
-        newButton.setText("New");
-        newButton.addActionListener(formListener);
+        qtyLabel.setText("Cantidad:");
 
-        deleteButton.setText("Delete");
+        ordDateLabel.setText("Fecha de Orden:");
 
-        binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ, masterTable, org.jdesktop.beansbinding.ELProperty.create("${selectedElement != null}"), deleteButton, org.jdesktop.beansbinding.BeanProperty.create("enabled"));
-        bindingGroup.addBinding(binding);
+        storLabel.setText("Tienda:");
 
-        deleteButton.addActionListener(formListener);
+        org.jdesktop.layout.GroupLayout panelRedondo1Layout = new org.jdesktop.layout.GroupLayout(panelRedondo1);
+        panelRedondo1.setLayout(panelRedondo1Layout);
+        panelRedondo1Layout.setHorizontalGroup(
+            panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(panelRedondo1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo1Layout.createSequentialGroup()
+                        .add(175, 175, 175)
+                        .add(newButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(5, 5, 5)
+                        .add(deleteButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(5, 5, 5)
+                        .add(refreshButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(5, 5, 5)
+                        .add(saveButton, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(panelRedondo1Layout.createSequentialGroup()
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(ordDateLabel)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, storLabel)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, storIdLabel)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, qtyLabel)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, paytermsLabel)
+                            .add(org.jdesktop.layout.GroupLayout.TRAILING, titleIdLabel))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, ordDateField)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, qtyField)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, paytermsField)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, titleIdField)
+                            .add(storIdField)
+                            .add(storField))))
+                .add(5, 5, 5))
+        );
+        panelRedondo1Layout.setVerticalGroup(
+            panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, panelRedondo1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(storIdLabel)
+                    .add(storIdField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(storLabel)
+                    .add(storField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(ordDateLabel)
+                    .add(ordDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(qtyLabel)
+                    .add(qtyField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(paytermsLabel)
+                    .add(paytermsField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(titleIdLabel)
+                    .add(titleIdField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                .add(5, 5, 5)
+                .add(panelRedondo1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(saveButton)
+                    .add(refreshButton)
+                    .add(deleteButton)
+                    .add(newButton))
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, list, masterTable);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${storId}"));
+        columnBinding.setColumnName("Stor Id");
+        columnBinding.setColumnClass(java.math.BigDecimal.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${stor}"));
+        columnBinding.setColumnName("Stor");
+        columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${ordDate}"));
+        columnBinding.setColumnName("Ord Date");
+        columnBinding.setColumnClass(java.util.Date.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${qty}"));
+        columnBinding.setColumnName("Qty");
+        columnBinding.setColumnClass(java.math.BigInteger.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${payterms}"));
+        columnBinding.setColumnName("Payterms");
+        columnBinding.setColumnClass(String.class);
+        columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${titleId}"));
+        columnBinding.setColumnName("Title Id");
+        columnBinding.setColumnClass(java.math.BigInteger.class);
+        bindingGroup.addBinding(jTableBinding);
+
+        masterScrollPane.setViewportView(masterTable);
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(10, 10, 10)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(masterScrollPane)
+                    .add(panelRedondo1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .add(10, 10, 10))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                .add(10, 10, 10)
+                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                .add(10, 10, 10)
+                .add(panelRedondo1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(newButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(deleteButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(refreshButton)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(saveButton))
-                    .add(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(layout.createSequentialGroup()
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(storIdLabel)
-                                    .add(storLabel)
-                                    .add(ordDateLabel)
-                                    .add(qtyLabel)
-                                    .add(paytermsLabel)
-                                    .add(titleIdLabel))
-                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                    .add(storIdField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                                    .add(storField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                                    .add(ordDateField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                                    .add(qtyField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                                    .add(paytermsField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                                    .add(titleIdField, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)))
-                            .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))))
-                .addContainerGap())
+            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        layout.linkSize(new java.awt.Component[] {deleteButton, newButton, refreshButton, saveButton}, org.jdesktop.layout.GroupLayout.HORIZONTAL);
-
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(masterScrollPane, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(storIdLabel)
-                    .add(storIdField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(storLabel)
-                    .add(storField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(ordDateLabel)
-                    .add(ordDateField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(qtyLabel)
-                    .add(qtyField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(paytermsLabel)
-                    .add(paytermsField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(titleIdLabel)
-                    .add(titleIdField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                    .add(saveButton)
-                    .add(refreshButton)
-                    .add(deleteButton)
-                    .add(newButton))
-                .addContainerGap())
+            .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         bindingGroup.bind();
-    }
-
-    // Code for dispatching events from components to event handlers.
-
-    private class FormListener implements java.awt.event.ActionListener {
-        FormListener() {}
-        public void actionPerformed(java.awt.event.ActionEvent evt) {
-            if (evt.getSource() == saveButton) {
-                ProSales.this.saveButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == refreshButton) {
-                ProSales.this.refreshButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == newButton) {
-                ProSales.this.newButtonActionPerformed(evt);
-            }
-            else if (evt.getSource() == deleteButton) {
-                ProSales.this.deleteButtonActionPerformed(evt);
-            }
-        }
     }// </editor-fold>//GEN-END:initComponents
-
-    
-
-    @SuppressWarnings("unchecked")
-    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
-        entityManager.getTransaction().rollback();
-        entityManager.getTransaction().begin();
-        java.util.Collection data = query.getResultList();
-        for (Object entity : data) {
-            entityManager.refresh(entity);
-        }
-        list.clear();
-        list.addAll(data);
-    }//GEN-LAST:event_refreshButtonActionPerformed
-    
-    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-        int[] selected = masterTable.getSelectedRows();
-        List<modelos.Sales> toRemove = new ArrayList<modelos.Sales>(selected.length);
-        for (int idx = 0; idx < selected.length; idx++) {
-            modelos.Sales s = list.get(masterTable.convertRowIndexToModel(selected[idx]));
-            toRemove.add(s);
-            entityManager.remove(s);
-        }
-        list.removeAll(toRemove);
-    }//GEN-LAST:event_deleteButtonActionPerformed
-    
-    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        modelos.Sales s = new modelos.Sales();
-        entityManager.persist(s);
-        list.add(s);
-        int row = list.size() - 1;
-        masterTable.setRowSelectionInterval(row, row);
-        masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
-    }//GEN-LAST:event_newButtonActionPerformed
-    
-    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
-        try {
-            entityManager.getTransaction().commit();
-            entityManager.getTransaction().begin();
-        } catch (RollbackException rex) {
-            rex.printStackTrace();
-            entityManager.getTransaction().begin();
-            List<modelos.Sales> merged = new ArrayList<modelos.Sales>(list.size());
-            for (modelos.Sales s : list) {
-                merged.add(entityManager.merge(s));
-            }
-            list.clear();
-            list.addAll(merged);
-        }
-    }//GEN-LAST:event_saveButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton deleteButton;
     private javax.persistence.EntityManager entityManager;
+    private javax.swing.JPanel jPanel1;
     private java.util.List<modelos.Sales> list;
     private javax.swing.JScrollPane masterScrollPane;
     private javax.swing.JTable masterTable;
     private javax.swing.JButton newButton;
     private javax.swing.JTextField ordDateField;
     private javax.swing.JLabel ordDateLabel;
+    private codigos.desing.PanelRedondo panelRedondo1;
     private javax.swing.JTextField paytermsField;
     private javax.swing.JLabel paytermsLabel;
     private javax.swing.JTextField qtyField;
@@ -320,6 +284,7 @@ public class ProSales extends JPanel {
     private javax.swing.JLabel titleIdLabel;
     private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
+
     public static void main(String[] args) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -354,5 +319,84 @@ public class ProSales extends JPanel {
                 frame.setVisible(true);
             }
         });
+    }
+
+    public class NuevoVenta extends NuevoAction {
+
+        public NuevoVenta() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            modelos.Sales s = new modelos.Sales();
+            entityManager.persist(s);
+            list.add(s);
+            int row = list.size() - 1;
+            masterTable.setRowSelectionInterval(row, row);
+            masterTable.scrollRectToVisible(masterTable.getCellRect(row, 0, true));
+        }
+    }
+
+    public class EliminarVenta extends EliminarAction {
+
+        public EliminarVenta() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            int[] selected = masterTable.getSelectedRows();
+            List<modelos.Sales> toRemove = new ArrayList<modelos.Sales>(selected.length);
+            for (int idx = 0; idx < selected.length; idx++) {
+                modelos.Sales s = list.get(masterTable.convertRowIndexToModel(selected[idx]));
+                toRemove.add(s);
+                entityManager.remove(s);
+            }
+            list.removeAll(toRemove);
+        }
+    }
+
+    public class RefreshVenta extends RefrescarAction {
+
+        public RefreshVenta() {
+            super();
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            entityManager.getTransaction().rollback();
+            entityManager.getTransaction().begin();
+            java.util.Collection data = query.getResultList();
+            for (Object entity : data) {
+                entityManager.refresh(entity);
+            }
+            list.clear();
+            list.addAll(data);
+        }
+    }
+    
+    public class GuardarVenta extends GuardarAction{
+
+        public GuardarVenta() {
+            super();
+        }
+        
+        @Override
+                public void actionPerformed(ActionEvent ae) {
+        try {
+            entityManager.getTransaction().commit();
+            entityManager.getTransaction().begin();
+        } catch (RollbackException rex) {
+            rex.printStackTrace();
+            entityManager.getTransaction().begin();
+            List<modelos.Sales> merged = new ArrayList<modelos.Sales>(list.size());
+            for (modelos.Sales s : list) {
+                merged.add(entityManager.merge(s));
+            }
+            list.clear();
+            list.addAll(merged);
+        }
+        }
     }
 }
