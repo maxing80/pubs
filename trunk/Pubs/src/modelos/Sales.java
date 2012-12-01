@@ -20,12 +20,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import org.hibernate.envers.Audited;
 
 /**
  *
  * @author Luis
  */
 @Entity
+@Audited
 @Table(name = "SALES", catalog = "", schema = "PUBS")
 @NamedQueries({
     @NamedQuery(name = "Sales.findAll", query = "SELECT s FROM Sales s"),
